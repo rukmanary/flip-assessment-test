@@ -1,6 +1,5 @@
 import React from 'react';
-import { StyleSheet, ScrollView, Text } from 'react-native';
-import { View } from 'react-native-reanimated/lib/typescript/Animated';
+import { View, StyleSheet, ScrollView, Text } from 'react-native';
 import { COLORS } from '../../themes';
 
 const TransactionList = ({ navigation }: { navigation: any }) => (
