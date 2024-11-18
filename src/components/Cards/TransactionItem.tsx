@@ -1,5 +1,5 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Icon } from '../../assets';
 import { COLORS } from '../../themes';
 import { TransferStatus } from '..';
@@ -36,7 +36,7 @@ const TransactionItem = ({ item }: TransactionItem) => {
             <Icon.ArrowRight />
             <Text style={styles.textBold}>{item.beneficiary_bank || '-'}</Text>
           </View>
-          <Text>{item.beneficiary_name || ''}</Text>
+          <Text style={styles.regularText}>{item.beneficiary_name || ''}</Text>
           <View style={styles.row}>
             <Text>{item.amount || ''}</Text>
             <View style={styles.circle} />
@@ -54,7 +54,7 @@ export default TransactionItem;
 const styles = StyleSheet.create({
   cardContainer: {
     flexDirection: 'row',
-    marginBottom: 8,
+    marginBottom: 12,
   },
   indicator: {
     backgroundColor: COLORS.tomato,
@@ -74,6 +74,7 @@ const styles = StyleSheet.create({
   },
   row: { flexDirection: 'row', alignItems: 'center' },
   textBold: { fontWeight: 'bold' },
+  regularText: { fontWeight: '400', lineHeight: 28 },
   circle: {
     backgroundColor: colors.black,
     width: 6,
