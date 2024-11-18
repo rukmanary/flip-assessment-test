@@ -36,9 +36,9 @@ const TransactionItem = ({ item }: TransactionItem) => {
           />
           <Text style={styles.regularText}>{item.beneficiary_name || ''}</Text>
           <View style={styles.row}>
-            <Text>{item.amount || ''}</Text>
+            <Text>{item.formattedAmount || ''}</Text>
             <View style={styles.circle} />
-            <Text>{item.created_at || ''}</Text>
+            <Text>{item.formattedCreatedAt || ''}</Text>
           </View>
         </View>
         <TransferStatus status={item.status} />
