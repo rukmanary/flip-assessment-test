@@ -41,16 +41,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: 'center',
   },
-  title: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  message: {
-    fontSize: 16,
-    marginBottom: 20,
-    textAlign: 'center',
-  },
+  title: { fontSize: 18, fontWeight: 'bold', marginBottom: 10 },
+  message: { fontSize: 16, marginBottom: 20, textAlign: 'center' },
 });
 
 export default ErrorPopup;

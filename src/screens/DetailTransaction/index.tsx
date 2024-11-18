@@ -88,10 +88,7 @@ const TransactionDetail = ({
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.whiteSmoke },
   contentStyle: { flex: 1 },
-  contentContainer: {
-    backgroundColor: COLORS.white,
-    marginTop: 16,
-  },
+  contentContainer: { backgroundColor: COLORS.white, marginTop: 16 },
   containerRow: {
     flexDirection: 'row',
     alignItems: 'center',

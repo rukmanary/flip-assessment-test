@@ -25,7 +25,7 @@ export interface BankTransferRouteProps {
 }
 
 export interface TransactionDetailProps {
-  navigation: NavigationProp<any>; // Sesuaikan dengan tipe navigator Anda
+  navigation: NavigationProp<any>;
   route: {
     params: {
       item: DetailTransactionData;

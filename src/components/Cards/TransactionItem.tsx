@@ -50,10 +50,7 @@ const TransactionItem = ({ item }: TransactionItem) => {
 export default TransactionItem;
 
 const styles = StyleSheet.create({
-  cardContainer: {
-    flexDirection: 'row',
-    marginBottom: 12,
-  },
+  cardContainer: { flexDirection: 'row', marginBottom: 12 },
   indicator: {
     backgroundColor: COLORS.tomato,
     width: '2%',
