@@ -4,13 +4,13 @@ import { Icon } from '../../assets';
 import { BankTransferRouteProps } from '../../types';
 
 const BankTransferRoute = ({ from, to }: BankTransferRouteProps) => (
-  <View>
+  <React.Fragment>
     <View style={styles.row}>
       <Text style={styles.textBold}>{from || '-'}</Text>
       <Icon.ArrowRight />
       <Text style={styles.textBold}>{to || '-'}</Text>
     </View>
-  </View>
+  </React.Fragment>
 );
 
 export default BankTransferRoute;
