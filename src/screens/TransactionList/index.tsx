@@ -10,13 +10,18 @@ import {
 import { COLORS } from '../../themes';
 import { useApiService } from '../../hooks';
 import { getTransactionList } from '../../api/apiServices';
-import { Searchbar, TransactionItem } from '../../components';
-import { DetailTransactionData } from '../../types';
-import { searchTransactions } from '../../helpers';
-import SortModal from '../../components/Modals/FilterModal';
+import { FilterModal, Searchbar, TransactionItem } from '../../components';
+import { DetailTransactionData, FILTER } from '../../types';
+import {
+  searchTransactions,
+  sortByAscendingName,
+  sortByDescendingName,
+  sortByNewestDate,
+  sortByOldestDate,
+} from '../../helpers';
 
 const TransactionList = () => {
-  const { data, error, fetchAPI, loading, statusCode, search } =
+  const { data, error, fetchAPI, loading, statusCode, search, applyFilter } =
     useApiService(getTransactionList);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedSort, setSelectedSort] = useState<string>('');
@@ -26,9 +31,31 @@ const TransactionList = () => {
     return () => {};
   }, [fetchAPI]);
 
-  const _handleSelectOption = (option: string) => {
-    setSelectedSort(option);
-  };
+  useEffect(() => {
+    switch (selectedSort) {
+      case FILTER.A_Z:
+        applyFilter(sortByAscendingName);
+        break;
+      case FILTER.Z_A:
+        applyFilter(sortByDescendingName);
+        break;
+      case FILTER.NEWEST:
+        applyFilter(sortByNewestDate);
+        break;
+      case FILTER.OLDEST:
+        applyFilter(sortByOldestDate);
+        break;
+      default:
+        applyFilter();
+        break;
+    }
+
+    return () => {};
+  }, [selectedSort, applyFilter]);
+
+  const _handleSelectOption = (option: string) => setSelectedSort(option);
+
+  const _onCloseModal = () => setModalVisible(false);
 
   const _openModalFilter = () => setModalVisible(true);
 
@@ -76,9 +103,9 @@ const TransactionList = () => {
         contentContainerStyle={styles.contentStyle}
         ListEmptyComponent={_emptyState}
       />
-      <SortModal
+      <FilterModal
         visible={modalVisible}
-        onClose={() => setModalVisible(false)}
+        onClose={_onCloseModal}
         onSelectOption={_handleSelectOption}
       />
     </SafeAreaView>
