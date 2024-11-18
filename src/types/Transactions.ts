@@ -13,6 +13,8 @@ export interface DetailTransactionData {
   created_at: string;
   completed_at: string;
   fee: number;
+  formattedAmount?: string;
+  formattedCreatedAt?: string;
 }
 
 export type TransactionListData = DetailTransactionData[];
