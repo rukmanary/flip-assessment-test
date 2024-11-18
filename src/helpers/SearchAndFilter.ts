@@ -9,14 +9,32 @@ const searchTransactions = (item: any, query: string): boolean => {
 
 const sortByAscendingName = (data: Array<any>) => {
   return [...data].sort((a, b) =>
-    a.beneficiary_name.localeCompare(b.beneficiary_name),
+    a.beneficiary_name.localeCompare(b.beneficiary_name, 'id-ID'),
   );
 };
 
 const sortByDescendingName = (data: Array<any>) => {
   return [...data].sort((a, b) =>
-    b.beneficiary_name.localeCompare(a.beneficiary_name),
+    b.beneficiary_name.localeCompare(a.beneficiary_name, 'id-ID'),
   );
 };
 
-export { searchTransactions, sortByAscendingName, sortByDescendingName };
+const sortByNewestDate = (data: Array<any>) => {
+  return [...data].sort((a, b) => {
+    return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+  });
+};
+
+const sortByOldestDate = (data: Array<any>) => {
+  return [...data].sort((a, b) => {
+    return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+  });
+};
+
+export {
+  searchTransactions,
+  sortByAscendingName,
+  sortByDescendingName,
+  sortByNewestDate,
+  sortByOldestDate,
+};
