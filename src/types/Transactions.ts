@@ -30,3 +30,10 @@ export interface TransactionDetailProps {
     };
   };
 }
+
+export interface TransactionRowProps {
+  leftTitle: string;
+  leftValue: string | number;
+  rightTitle?: string;
+  rightValue?: string | number;
+}
