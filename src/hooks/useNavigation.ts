@@ -1,10 +1,11 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import ScreenName from '../navigation/ScreenName';
+import { DetailTransactionData } from '../types';
 
 type RootStackParamList = {
   [ScreenName.TRANSACTION_LIST]: undefined;
-  [ScreenName.DETAIL_TRANSACTION]: { itemId: string };
+  [ScreenName.DETAIL_TRANSACTION]: { item: DetailTransactionData };
 };
 
 const useAppNavigation = () => {
@@ -15,8 +16,8 @@ const useAppNavigation = () => {
     navigation.navigate(ScreenName.TRANSACTION_LIST);
   };
 
-  const navigateToDetails = (itemId: string) => {
-    navigation.navigate(ScreenName.DETAIL_TRANSACTION, { itemId });
+  const navigateToDetails = (item: DetailTransactionData) => {
+    navigation.navigate(ScreenName.DETAIL_TRANSACTION, { item });
   };
 
   return {
