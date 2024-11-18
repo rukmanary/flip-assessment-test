@@ -7,7 +7,7 @@ interface UseApiServiceReturn<T> {
   error: string | null;
   statusCode: number | null;
   fetchAPI: (...args: any[]) => Promise<void>;
-  applyFilter: (filterFn: (data: T) => T) => void;
+  applyFilter: (filterFn?: (data: T) => T) => void;
   search: (
     query: string,
     searchFn: (item: T, query: string) => boolean,
@@ -64,10 +64,9 @@ const useApiService = <T>(
   );
 
   const applyFilter = useCallback(
-    (filterFn: (data: T) => T) => {
+    (filterFn?: (data: T) => T) => {
       if (rawData) {
-        const filtered = filterFn(rawData);
-        setData(filtered);
+        setData(filterFn ? filterFn(rawData) : rawData);
       }
     },
     [rawData],
