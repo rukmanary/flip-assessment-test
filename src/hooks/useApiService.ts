@@ -19,9 +19,14 @@ const useApiService = <T>(
 ): UseApiServiceReturn<T> => {
   const [data, setData] = useState<T | null>(null);
   const [rawData, setRawData] = useState<T | null>(null);
+  const [filteredData, setFilteredData] = useState<T | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<any>(null);
   const [statusCode, setStatusCode] = useState<number | null>(null);
+  const [lastSearchQuery, setLastSearchQuery] = useState<string>('');
+  const [lastSearchFunction, setLastSearchFunction] = useState<
+    ((item: T, query: string) => boolean) | null
+  >(null);
 
   const fetchAPI = useCallback(
     // param from component
@@ -34,6 +39,7 @@ const useApiService = <T>(
         const result = await apiFunction(...fetchAPIArgs);
         setData(result);
         setRawData(result);
+        setFilteredData(result);
       } catch (err: any) {
         console.log({ err: err.response });
         setError(err.response?.data?.message || err.message || 'Unknown error');
@@ -47,29 +53,42 @@ const useApiService = <T>(
 
   const search = useCallback(
     (query: string, searchFunction: (item: T, query: string) => boolean) => {
+      setLastSearchQuery(query);
+      setLastSearchFunction(() => searchFunction);
+
       if (!query) {
-        setData(rawData);
+        setData(filteredData);
         return;
       }
 
-      if (Array.isArray(rawData)) {
+      if (Array.isArray(filteredData)) {
         const lowerCaseQuery = query.toLowerCase();
-        const filtered = rawData?.filter?.(item =>
+        const filtered = filteredData?.filter?.(item =>
           searchFunction(item, lowerCaseQuery),
         );
         setData(filtered as T);
       }
     },
-    [rawData],
+    [filteredData],
   );
 
   const applyFilter = useCallback(
     (filterFn?: (data: T) => T) => {
       if (rawData) {
-        setData(filterFn ? filterFn(rawData) : rawData);
+        const filtered = filterFn ? filterFn(rawData) : rawData;
+        setFilteredData(filtered);
+        if (lastSearchQuery && lastSearchFunction) {
+          const lowerCaseQuery = lastSearchQuery.toLowerCase();
+          const searched = Array.isArray(filtered)
+            ? filtered.filter(item => lastSearchFunction(item, lowerCaseQuery))
+            : filtered;
+          setData(searched as T);
+        } else {
+          setData(filtered);
+        }
       }
     },
-    [rawData],
+    [rawData, lastSearchQuery, lastSearchFunction],
   );
 
   return {
