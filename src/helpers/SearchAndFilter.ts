@@ -1,5 +1,3 @@
-import { TransactionListData } from '../types';
-
 const searchTransactions = (item: any, query: string): boolean => {
   return (
     item.amount.toString().includes(query) ||
