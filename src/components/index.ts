@@ -1,3 +1,5 @@
-import ErrorAPI from './ErrorAPI';
+import ErrorAPI from './Popups/ErrorAPI';
+import TransactionItem from './Cards/TransactionItem';
+import TransferStatus from './Labels/TransferStatus';
 
-export { ErrorAPI };
+export { ErrorAPI, TransactionItem, TransferStatus };
