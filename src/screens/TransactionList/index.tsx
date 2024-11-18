@@ -12,15 +12,18 @@ import { useApiService } from '../../hooks';
 import { getTransactionList } from '../../api/apiServices';
 import { Searchbar, TransactionItem } from '../../components';
 import { DetailTransactionData } from '../../types';
+import { searchTransactions } from '../../helpers';
 
 const TransactionList = () => {
-  const { applyFilter, data, error, fetchAPI, loading, statusCode } =
+  const { data, error, fetchAPI, loading, statusCode, search } =
     useApiService(getTransactionList);
 
   useEffect(() => {
     fetchAPI();
     return () => {};
   }, [fetchAPI]);
+
+  const _onSearch = (text: string) => search(text, searchTransactions);
 
   const renderItem = ({ item }: { item: DetailTransactionData }) => (
     <TransactionItem key={item.id} item={item} />
@@ -52,7 +55,7 @@ const TransactionList = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Searchbar />
+      <Searchbar onSearch={_onSearch} />
       <FlatList
         data={data}
         keyExtractor={item => item.id.toString()}
