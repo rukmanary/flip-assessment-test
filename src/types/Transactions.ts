@@ -1,3 +1,5 @@
+import { NavigationProp } from '@react-navigation/native';
+
 export interface DetailTransactionData {
   id: string;
   amount: number;
@@ -14,3 +16,17 @@ export interface DetailTransactionData {
 }
 
 export type TransactionListData = DetailTransactionData[];
+
+export interface BankTransferRouteProps {
+  from: string;
+  to: string;
+}
+
+export interface TransactionDetailProps {
+  navigation: NavigationProp<any>; // Sesuaikan dengan tipe navigator Anda
+  route: {
+    params: {
+      item: DetailTransactionData;
+    };
+  };
+}
