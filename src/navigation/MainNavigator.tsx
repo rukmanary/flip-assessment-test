@@ -16,10 +16,12 @@ const MainNavigator = () => {
       <Stack.Screen
         name={ScreenName.TRANSACTION_LIST}
         component={TransactionList}
+        options={{ title: 'Transaction History' }}
       />
       <Stack.Screen
         name={ScreenName.DETAIL_TRANSACTION}
         component={DetailTransaction}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );
