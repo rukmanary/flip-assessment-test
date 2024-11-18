@@ -29,7 +29,7 @@ interface SortModalProps {
   onSelectOption: (option: string) => void;
 }
 
-const SortModal = ({ visible, onClose, onSelectOption }: SortModalProps) => {
+const FilterModal = ({ visible, onClose, onSelectOption }: SortModalProps) => {
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
 
   const handleSelectOption = (option: SortOption) => {
@@ -113,4 +113,4 @@ const styles = StyleSheet.create({
   selectedOptionText: { fontWeight: 'bold', color: COLORS.tomato },
 });
 
-export default SortModal;
+export default FilterModal;
