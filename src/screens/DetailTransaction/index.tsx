@@ -1,16 +1,33 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import { View, StyleSheet, ScrollView, Text } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 import { COLORS } from '../../themes';
 import { TransactionDetailProps } from '../../types';
 import { Icon } from '../../assets';
 import { BankTransferRoute, TransactionRow } from '../../components';
+import { useNavigation } from '../../hooks';
+import { copyToClipboard } from '../../helpers';
+import { Snackbar } from 'react-native-paper';
 
 const TransactionDetail = ({
   route: {
     params: { item },
   },
 }: TransactionDetailProps) => {
+  const { navigation } = useNavigation();
+  const [visible, setVisible] = React.useState(false);
+
+  const copyTransactionID = () => {
+    copyToClipboard(item.id);
+    setVisible(true);
+  };
+
   return (
     <ScrollView
       style={styles.container}
@@ -22,12 +39,16 @@ const TransactionDetail = ({
               styles.textMedium,
               { marginRight: 4 },
             ]}>{`ID TRANSAKSI:#${item.id}`}</Text>
-          <Icon.Copy />
+          <TouchableOpacity activeOpacity={0.7} onPress={copyTransactionID}>
+            <Icon.Copy />
+          </TouchableOpacity>
         </View>
         <View
           style={[styles.containerRow, { justifyContent: 'space-between' }]}>
           <Text style={styles.textMedium}>DETAIL TRANSAKSI</Text>
-          <Text style={[styles.textMedium, { color: COLORS.tomato }]}>
+          <Text
+            onPress={() => navigation.pop()}
+            style={[styles.textMedium, { color: COLORS.tomato }]}>
             Tutup
           </Text>
         </View>
@@ -54,6 +75,12 @@ const TransactionDetail = ({
           />
         </View>
       </View>
+      <Snackbar
+        visible={visible}
+        onDismiss={() => setVisible(false)}
+        duration={1000}>
+        Id transaksi berhasil disalin
+      </Snackbar>
     </ScrollView>
   );
 };
