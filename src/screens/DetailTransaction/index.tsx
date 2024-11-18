@@ -52,11 +52,13 @@ const TransactionDetail = ({
             Tutup
           </Text>
         </View>
-        <View style={{ padding: 24 }}>
-          <BankTransferRoute
-            from={item.sender_bank}
-            to={item.beneficiary_bank}
-          />
+        <View style={{ padding: 16 }}>
+          <View style={{ marginBottom: 16 }}>
+            <BankTransferRoute
+              from={item.sender_bank}
+              to={item.beneficiary_bank}
+            />
+          </View>
           <TransactionRow
             leftTitle={item.beneficiary_name}
             leftValue={item.account_number}
