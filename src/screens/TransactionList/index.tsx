@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -13,23 +13,32 @@ import { getTransactionList } from '../../api/apiServices';
 import { Searchbar, TransactionItem } from '../../components';
 import { DetailTransactionData } from '../../types';
 import { searchTransactions } from '../../helpers';
+import SortModal from '../../components/Modals/FilterModal';
 
 const TransactionList = () => {
   const { data, error, fetchAPI, loading, statusCode, search } =
     useApiService(getTransactionList);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedSort, setSelectedSort] = useState<string>('');
 
   useEffect(() => {
     fetchAPI();
     return () => {};
   }, [fetchAPI]);
 
+  const _handleSelectOption = (option: string) => {
+    setSelectedSort(option);
+  };
+
+  const _openModalFilter = () => setModalVisible(true);
+
   const _onSearch = (text: string) => search(text, searchTransactions);
 
-  const renderItem = ({ item }: { item: DetailTransactionData }) => (
+  const _renderItem = ({ item }: { item: DetailTransactionData }) => (
     <TransactionItem key={item.id} item={item} />
   );
 
-  const emptyState = () => (
+  const _emptyState = () => (
     <View style={styles.center}>
       <Text style={styles.emptyText}>Tidak ada transaksi.</Text>
     </View>
@@ -55,13 +64,22 @@ const TransactionList = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Searchbar onSearch={_onSearch} />
+      <Searchbar
+        onSearch={_onSearch}
+        onSortPress={_openModalFilter}
+        sortText={selectedSort}
+      />
       <FlatList
         data={data}
         keyExtractor={item => item.id.toString()}
-        renderItem={renderItem}
+        renderItem={_renderItem}
         contentContainerStyle={styles.contentStyle}
-        ListEmptyComponent={emptyState}
+        ListEmptyComponent={_emptyState}
+      />
+      <SortModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        onSelectOption={_handleSelectOption}
       />
     </SafeAreaView>
   );
