@@ -5,6 +5,8 @@ import TransferStatus from './Labels/TransferStatus';
 import BankTransferRoute from './Labels/BankTransferRoute';
 import TransactionRow from './Rows/TransactionRow';
 import FilterModal from './Modals/FilterModal';
+import ErrorState from './States/ErrorState';
+import LoadingState from './States/LoadingState';
 
 export {
   ErrorAPI,
@@ -14,4 +16,6 @@ export {
   BankTransferRoute,
   TransactionRow,
   FilterModal,
+  ErrorState,
+  LoadingState,
 };
