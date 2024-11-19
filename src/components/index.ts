@@ -7,6 +7,7 @@ import TransactionRow from './Rows/TransactionRow';
 import FilterModal from './Modals/FilterModal';
 import ErrorState from './States/ErrorState';
 import LoadingState from './States/LoadingState';
+import Snackbar from './Snackbar/Snackbar';
 
 export {
   ErrorAPI,
@@ -18,4 +19,5 @@ export {
   FilterModal,
   ErrorState,
   LoadingState,
+  Snackbar,
 };
