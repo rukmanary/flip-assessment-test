@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import React, { memo, useCallback } from 'react';
 import {
   View,
   StyleSheet,
@@ -23,37 +23,46 @@ const TransactionDetail = ({
   const { navigation } = useNavigation();
   const [visible, setVisible] = React.useState(false);
 
-  const copyTransactionID = () => {
+  const _copyTransactionID = useCallback(() => {
     copyToClipboard(item.id);
     setVisible(true);
-  };
+  }, [item.id]);
+
+  const _handleCloseSnackbar = useCallback(() => {
+    setVisible(false);
+  }, []);
 
   return (
     <ScrollView
       style={styles.container}
       contentContainerStyle={styles.contentStyle}>
       <View style={styles.contentContainer}>
+        {/* ID Transaction Section */}
         <View style={styles.containerRow}>
           <Text
             style={[
               styles.textMedium,
               { marginRight: 4 },
             ]}>{`ID TRANSAKSI:#${item.id}`}</Text>
-          <TouchableOpacity activeOpacity={0.7} onPress={copyTransactionID}>
+          <TouchableOpacity activeOpacity={0.7} onPress={_copyTransactionID}>
             <Icon.Copy />
           </TouchableOpacity>
         </View>
+
+        {/* Detail Transaksi Section */}
         <View
           style={[styles.containerRow, { justifyContent: 'space-between' }]}>
           <Text style={styles.textMedium}>DETAIL TRANSAKSI</Text>
           <Text
-            onPress={() => navigation.pop()}
+            onPress={navigation.goBack}
             style={[styles.textMedium, { color: COLORS.tomato }]}>
             Tutup
           </Text>
         </View>
-        <View style={{ padding: 16 }}>
-          <View style={{ marginBottom: 16 }}>
+
+        {/* Transaction Details */}
+        <View style={styles.detailContainer}>
+          <View style={styles.rowMargin}>
             <BankTransferRoute
               from={item.sender_bank}
               to={item.beneficiary_bank}
@@ -77,9 +86,11 @@ const TransactionDetail = ({
           />
         </View>
       </View>
+
+      {/* Snackbar */}
       <Snackbar
         visible={visible}
-        onDismiss={() => setVisible(false)}
+        onDismiss={_handleCloseSnackbar}
         duration={1000}>
         Id transaksi berhasil disalin
       </Snackbar>
@@ -100,8 +111,10 @@ const styles = StyleSheet.create({
   },
   textMedium: { fontWeight: '600' },
   textRegular: { fontWeight: '400' },
+  detailContainer: { padding: 16 },
+  rowMargin: { marginBottom: 16 },
   row: { flexDirection: 'row', alignItems: 'center' },
   flex1: { flex: 1 },
 });
 
-export default TransactionDetail;
+export default memo(TransactionDetail);
