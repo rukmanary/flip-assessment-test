@@ -1,4 +1,5 @@
-import { useState, useCallback } from 'react';
+/* eslint-disable curly */
+import { useCallback, useState } from 'react';
 
 interface UseApiServiceReturn<T> {
   data: T | null;
@@ -41,7 +42,6 @@ const useApiService = <T>(
         setRawData(result);
         setFilteredData(result);
       } catch (err: any) {
-        console.log({ err: err.response });
         setError(err.response?.data?.message || err.message || 'Unknown error');
         setStatusCode(err.response?.status || null);
       } finally {
@@ -74,18 +74,19 @@ const useApiService = <T>(
 
   const applyFilter = useCallback(
     (filterFn?: (data: T) => T) => {
-      if (rawData) {
-        const filtered = filterFn ? filterFn(rawData) : rawData;
-        setFilteredData(filtered);
-        if (lastSearchQuery && lastSearchFunction) {
-          const lowerCaseQuery = lastSearchQuery.toLowerCase();
-          const searched = Array.isArray(filtered)
-            ? filtered.filter(item => lastSearchFunction(item, lowerCaseQuery))
-            : filtered;
-          setData(searched as T);
-        } else {
-          setData(filtered);
-        }
+      if (!rawData) return;
+
+      const filtered = filterFn ? filterFn(rawData) : rawData;
+      setFilteredData(filtered);
+
+      if (lastSearchQuery && lastSearchFunction && Array.isArray(filtered)) {
+        const lowerCaseQuery = lastSearchQuery.toLowerCase();
+        const searched = filtered.filter(item =>
+          lastSearchFunction(item, lowerCaseQuery),
+        );
+        setData(searched as T);
+      } else {
+        setData(filtered);
       }
     },
     [rawData, lastSearchQuery, lastSearchFunction],

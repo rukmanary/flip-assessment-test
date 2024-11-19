@@ -1,24 +1,25 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Modal, View, Text, Button, StyleSheet } from 'react-native';
 
 type ErrorPopupProps = {
   visible: boolean;
   message: string;
   onClose: () => void;
-  status: number | null;
+  status?: number | null;
 };
 
-const ErrorPopup: React.FC<ErrorPopupProps> = ({
-  visible,
-  message,
-  onClose,
-  status,
-}) => {
+const ErrorPopup = ({ visible, message, onClose, status }: ErrorPopupProps) => {
   return (
-    <Modal transparent={true} visible={visible} animationType="slide">
+    <Modal
+      transparent={true}
+      visible={visible}
+      animationType="slide"
+      onRequestClose={onClose}
+      accessible
+      accessibilityLabel="Error notification">
       <View style={styles.overlay}>
         <View style={styles.container}>
-          <Text style={styles.title}>{`Error ${status}`}</Text>
+          <Text style={styles.title}>{`Error ${status || ''}`}</Text>
           <Text style={styles.message}>{message}</Text>
           <Button title="Close" onPress={onClose} />
         </View>
@@ -45,4 +46,4 @@ const styles = StyleSheet.create({
   message: { fontSize: 16, marginBottom: 20, textAlign: 'center' },
 });
 
-export default ErrorPopup;
+export default memo(ErrorPopup);

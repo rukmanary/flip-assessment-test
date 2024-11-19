@@ -1,7 +1,7 @@
 import axios, {
+  AxiosError,
   AxiosResponse,
   InternalAxiosRequestConfig,
-  AxiosError,
 } from 'axios';
 
 let showErrorPopup: (status: number | null, message: string) => void = () => {};
@@ -38,17 +38,24 @@ apiClient.interceptors.response.use(
       const statusCode = error.response.status;
       const message = error.response.statusText || `Error ${statusCode}`;
 
-      if (statusCode === 401) {
-        showErrorPopup(statusCode, 'Unauthorized access. Please log in.');
-      } else if (statusCode === 404) {
-        showErrorPopup(statusCode, 'Requested resource not found.');
-      } else if (statusCode === 500) {
-        showErrorPopup(
-          statusCode,
-          'Internal server error. Please try again later.',
-        );
-      } else {
-        showErrorPopup(statusCode, message);
+      switch (statusCode) {
+        case 401:
+          showErrorPopup(statusCode, 'Unauthorized access. Please log in.');
+          break;
+        case 404:
+          showErrorPopup(statusCode, 'Requested resource not found.');
+          break;
+        case 500:
+          showErrorPopup(
+            statusCode,
+            'Internal server error. Please try again later.',
+          );
+          break;
+        case 504:
+          showErrorPopup(statusCode, 'Request Timeout.');
+          break;
+        default:
+          showErrorPopup(statusCode, message || 'An unknown error occurred.');
       }
     } else {
       showErrorPopup(

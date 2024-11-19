@@ -1,17 +1,21 @@
-import React, { useEffect, useState } from 'react';
+/* eslint-disable curly */
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
-  View,
+  FlatList,
+  KeyboardAvoidingView,
+  SafeAreaView,
   StyleSheet,
   Text,
-  FlatList,
-  ActivityIndicator,
-  SafeAreaView,
+  View,
 } from 'react-native';
-import { COLORS } from '../../themes';
-import { useApiService } from '../../hooks';
 import { getTransactionList } from '../../api/apiServices';
-import { FilterModal, Searchbar, TransactionItem } from '../../components';
-import { DetailTransactionData, FILTER } from '../../types';
+import {
+  ErrorState,
+  FilterModal,
+  LoadingState,
+  Searchbar,
+  TransactionItem,
+} from '../../components';
 import {
   searchTransactions,
   sortByAscendingName,
@@ -19,6 +23,9 @@ import {
   sortByNewestDate,
   sortByOldestDate,
 } from '../../helpers';
+import { useApiService } from '../../hooks';
+import { COLORS } from '../../themes';
+import { DetailTransactionData, FILTER } from '../../types';
 
 const TransactionList = () => {
   const { data, error, fetchAPI, loading, statusCode, search, applyFilter } =
@@ -26,43 +33,46 @@ const TransactionList = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedSort, setSelectedSort] = useState<string>('');
 
+  const _filterFunction = useMemo(() => {
+    switch (selectedSort) {
+      case FILTER.A_Z:
+        return sortByAscendingName;
+      case FILTER.Z_A:
+        return sortByDescendingName;
+      case FILTER.NEWEST:
+        return sortByNewestDate;
+      case FILTER.OLDEST:
+        return sortByOldestDate;
+      default:
+        return undefined;
+    }
+  }, [selectedSort]);
+
   useEffect(() => {
     fetchAPI();
     return () => {};
   }, [fetchAPI]);
 
   useEffect(() => {
-    switch (selectedSort) {
-      case FILTER.A_Z:
-        applyFilter(sortByAscendingName);
-        break;
-      case FILTER.Z_A:
-        applyFilter(sortByDescendingName);
-        break;
-      case FILTER.NEWEST:
-        applyFilter(sortByNewestDate);
-        break;
-      case FILTER.OLDEST:
-        applyFilter(sortByOldestDate);
-        break;
-      default:
-        applyFilter();
-        break;
-    }
+    applyFilter(_filterFunction);
+  }, [_filterFunction, applyFilter]);
 
-    return () => {};
-  }, [selectedSort, applyFilter]);
+  const _handleSelectOption = useCallback(
+    (option: string) => setSelectedSort(option),
+    [],
+  );
 
-  const _handleSelectOption = (option: string) => setSelectedSort(option);
+  const _onCloseModal = useCallback(() => setModalVisible(false), []);
 
-  const _onCloseModal = () => setModalVisible(false);
-
-  const _openModalFilter = () => setModalVisible(true);
+  const _openModalFilter = useCallback(() => setModalVisible(true), []);
 
   const _onSearch = (text: string) => search(text, searchTransactions);
 
-  const _renderItem = ({ item }: { item: DetailTransactionData }) => (
-    <TransactionItem key={item.id} item={item} />
+  const _renderItem = useCallback(
+    ({ item }: { item: DetailTransactionData }) => (
+      <TransactionItem key={item.id} item={item} />
+    ),
+    [],
   );
 
   const _emptyState = () => (
@@ -71,43 +81,30 @@ const TransactionList = () => {
     </View>
   );
 
-  if (loading) {
-    return (
-      <View style={styles.center}>
-        <ActivityIndicator size="large" color={COLORS.tomato} />
-      </View>
-    );
-  } else if (error) {
-    return (
-      <View style={styles.center}>
-        <Text style={styles.errorText}>
-          {statusCode === 404
-            ? 'Data tidak ditemukan.'
-            : 'Terjadi kesalahan. Silakan coba lagi.'}
-        </Text>
-      </View>
-    );
-  }
+  if (loading) return <LoadingState />;
+  if (error) return <ErrorState statusCode={statusCode} />;
 
   return (
     <SafeAreaView style={styles.container}>
-      <Searchbar
-        onSearch={_onSearch}
-        onSortPress={_openModalFilter}
-        sortText={selectedSort}
-      />
-      <FlatList
-        data={data}
-        keyExtractor={item => item.id.toString()}
-        renderItem={_renderItem}
-        contentContainerStyle={styles.contentStyle}
-        ListEmptyComponent={_emptyState}
-      />
-      <FilterModal
-        visible={modalVisible}
-        onClose={_onCloseModal}
-        onSelectOption={_handleSelectOption}
-      />
+      <KeyboardAvoidingView style={styles.container} behavior="padding">
+        <Searchbar
+          onSearch={_onSearch}
+          onSortPress={_openModalFilter}
+          sortText={selectedSort}
+        />
+        <FlatList
+          data={data}
+          keyExtractor={item => item.id.toString()}
+          renderItem={_renderItem}
+          contentContainerStyle={styles.contentStyle}
+          ListEmptyComponent={_emptyState}
+        />
+        <FilterModal
+          visible={modalVisible}
+          onClose={_onCloseModal}
+          onSelectOption={_handleSelectOption}
+        />
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };

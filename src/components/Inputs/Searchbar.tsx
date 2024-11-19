@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import {
   StyleSheet,
   Text,
@@ -6,8 +6,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { COLORS } from '../../themes';
 import { Icon } from '../../assets';
+import { COLORS } from '../../themes';
 
 interface InputSearchProps {
   onSearch: (text: string) => void;
@@ -23,7 +23,10 @@ const Searchbar = ({ onSearch, onSortPress, sortText }: InputSearchProps) => {
           placeholder="Cari nama, bank, atau nominal"
           placeholderTextColor={COLORS.darkGrey}
           style={styles.input}
+          autoCorrect={false}
+          allowFontScaling={false}
           onChangeText={onSearch}
+          textAlignVertical="center"
         />
       </View>
       <TouchableOpacity
@@ -37,20 +40,18 @@ const Searchbar = ({ onSearch, onSortPress, sortText }: InputSearchProps) => {
   );
 };
 
-export default Searchbar;
-
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderRadius: 8,
     paddingHorizontal: 16,
     paddingVertical: 12,
     marginHorizontal: 8,
     marginTop: 16,
     marginBottom: 8,
-    shadowColor: '#000',
+    shadowColor: COLORS.black,
     shadowOpacity: 0.1,
     shadowRadius: 5,
     shadowOffset: { width: 0, height: 2 },
@@ -71,3 +72,5 @@ const styles = StyleSheet.create({
   containerFilter: { flexDirection: 'row', alignItems: 'center' },
   textFilter: { color: COLORS.tomato, fontWeight: 'bold' },
 });
+
+export default memo(Searchbar);

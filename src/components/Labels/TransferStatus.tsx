@@ -7,36 +7,47 @@ interface TransferStatus {
   status: 'SUCCESS' | 'PENDING' | string;
 }
 
+const LabelContainer = ({
+  style,
+  text,
+  textStyle,
+}: {
+  style: object;
+  text: string;
+  textStyle: object;
+}) => (
+  <View style={[styles.baseContainer, style]}>
+    <Text style={textStyle}>{text}</Text>
+  </View>
+);
+
 const TransferStatus = ({ status }: TransferStatus) => {
   if (status === Status.SUCCESS) {
     return (
-      <View style={styles.labelContainer}>
-        <Text style={styles.whiteText}>Berhasil</Text>
-      </View>
+      <LabelContainer
+        text="Berhasil"
+        style={styles.successContainer}
+        textStyle={styles.whiteText}
+      />
     );
   } else if (status === Status.PENDING) {
     return (
-      <View style={styles.borderOnlyContainer}>
-        <Text style={styles.blackText}>Pengecekan</Text>
-      </View>
+      <LabelContainer
+        text="Pengecekan"
+        style={styles.pendingContainer}
+        textStyle={styles.blackText}
+      />
     );
   }
+  return null;
 };
 
-export default TransferStatus;
-
 const styles = StyleSheet.create({
-  labelContainer: {
-    backgroundColor: COLORS.mediumSeaGreen,
-    padding: 8,
-    borderRadius: 8,
-  },
-  borderOnlyContainer: {
-    borderWidth: 1,
-    borderColor: COLORS.tomato,
-    padding: 8,
-    borderRadius: 8,
-  },
+  baseContainer: { padding: 8, borderRadius: 8, alignItems: 'center' },
+  successContainer: { backgroundColor: COLORS.mediumSeaGreen },
+  pendingContainer: { borderWidth: 1, borderColor: COLORS.tomato },
   whiteText: { color: COLORS.white, fontWeight: '600' },
   blackText: { color: COLORS.black, fontWeight: '600' },
 });
+
+export default TransferStatus;

@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { memo } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import { TransactionRowProps } from '../../types';
 
 const TransactionRow = ({
@@ -38,4 +38,4 @@ const styles = StyleSheet.create({
   value: { fontWeight: '400', fontSize: 16 },
 });
 
-export default TransactionRow;
+export default memo(TransactionRow);

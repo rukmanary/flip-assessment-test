@@ -1,31 +1,33 @@
-import React from 'react';
+import React, { memo, useCallback } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { COLORS } from '../../themes';
 import { BankTransferRoute, TransferStatus } from '..';
-import { DetailTransactionData, Status } from '../../types';
-import colors from '../../themes/colors';
 import { useNavigation } from '../../hooks';
+import { COLORS } from '../../themes';
+import { DetailTransactionData, Status } from '../../types';
 
 interface TransactionItem {
   item: DetailTransactionData;
 }
 
+const getIndicatorColor = (status: string) =>
+  status === Status.SUCCESS ? COLORS.mediumSeaGreen : COLORS.tomato;
+
 const TransactionItem = ({ item }: TransactionItem) => {
   const { navigateToDetails } = useNavigation();
+
+  const _handleNavigate = useCallback(() => {
+    navigateToDetails(item);
+  }, [navigateToDetails, item]);
+
   return (
     <TouchableOpacity
-      onPress={() => navigateToDetails(item)}
+      onPress={_handleNavigate}
       activeOpacity={0.7}
       style={styles.cardContainer}>
       <View
         style={[
           styles.indicator,
-          {
-            backgroundColor:
-              item.status === Status.SUCCESS
-                ? COLORS.mediumSeaGreen
-                : COLORS.tomato,
-          },
+          { backgroundColor: getIndicatorColor(item.status) },
         ]}
       />
       <View style={styles.contentContainer}>
@@ -46,8 +48,6 @@ const TransactionItem = ({ item }: TransactionItem) => {
     </TouchableOpacity>
   );
 };
-
-export default TransactionItem;
 
 const styles = StyleSheet.create({
   cardContainer: { flexDirection: 'row', marginBottom: 12 },
@@ -70,10 +70,12 @@ const styles = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'center' },
   regularText: { fontWeight: '400', lineHeight: 28 },
   circle: {
-    backgroundColor: colors.black,
+    backgroundColor: COLORS.black,
     width: 6,
     height: 6,
     borderRadius: 6,
     marginHorizontal: 4,
   },
 });
+
+export default memo(TransactionItem);
