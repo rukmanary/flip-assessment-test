@@ -6,14 +6,14 @@ import {
   ScrollView,
   Text,
   TouchableOpacity,
+  SafeAreaView,
 } from 'react-native';
 import { COLORS } from '../../themes';
 import { TransactionDetailProps } from '../../types';
 import { Icon } from '../../assets';
-import { BankTransferRoute, TransactionRow } from '../../components';
+import { BankTransferRoute, Snackbar, TransactionRow } from '../../components';
 import { useNavigation } from '../../hooks';
 import { copyToClipboard } from '../../helpers';
-import { Snackbar } from 'react-native-paper';
 
 const TransactionDetail = ({
   route: {
@@ -33,68 +33,70 @@ const TransactionDetail = ({
   }, []);
 
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={styles.contentStyle}>
-      <View style={styles.contentContainer}>
-        {/* ID Transaction Section */}
-        <View style={styles.containerRow}>
-          <Text
-            style={[
-              styles.textMedium,
-              { marginRight: 4 },
-            ]}>{`ID TRANSAKSI:#${item.id}`}</Text>
-          <TouchableOpacity activeOpacity={0.7} onPress={_copyTransactionID}>
-            <Icon.Copy />
-          </TouchableOpacity>
-        </View>
+    <SafeAreaView style={styles.container}>
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={styles.contentStyle}>
+        <View style={styles.contentContainer}>
+          {/* ID Transaction Section */}
+          <View style={styles.containerRow}>
+            <Text
+              style={[
+                styles.textMedium,
+                { marginRight: 4 },
+              ]}>{`ID TRANSAKSI:#${item.id}`}</Text>
+            <TouchableOpacity activeOpacity={0.7} onPress={_copyTransactionID}>
+              <Icon.Copy />
+            </TouchableOpacity>
+          </View>
 
-        {/* Detail Transaksi Section */}
-        <View
-          style={[styles.containerRow, { justifyContent: 'space-between' }]}>
-          <Text style={styles.textMedium}>DETAIL TRANSAKSI</Text>
-          <Text
-            onPress={navigation.goBack}
-            style={[styles.textMedium, { color: COLORS.tomato }]}>
-            Tutup
-          </Text>
-        </View>
+          {/* Detail Transaksi Section */}
+          <View
+            style={[styles.containerRow, { justifyContent: 'space-between' }]}>
+            <Text style={styles.textMedium}>DETAIL TRANSAKSI</Text>
+            <Text
+              onPress={navigation.goBack}
+              style={[styles.textMedium, { color: COLORS.tomato }]}>
+              Tutup
+            </Text>
+          </View>
 
-        {/* Transaction Details */}
-        <View style={styles.detailContainer}>
-          <View style={styles.rowMargin}>
-            <BankTransferRoute
-              from={item.sender_bank}
-              to={item.beneficiary_bank}
+          {/* Transaction Details */}
+          <View style={styles.detailContainer}>
+            <View style={styles.rowMargin}>
+              <BankTransferRoute
+                from={item.sender_bank}
+                to={item.beneficiary_bank}
+              />
+            </View>
+            <TransactionRow
+              leftTitle={item.beneficiary_name}
+              leftValue={item.account_number}
+              rightTitle="NOMINAL"
+              rightValue={item.amount}
+            />
+            <TransactionRow
+              leftTitle="BERITA TRANSFER"
+              leftValue={item.remark}
+              rightTitle="KODE UNIK"
+              rightValue={item.unique_code}
+            />
+            <TransactionRow
+              leftTitle="WAKTU DIBUAT"
+              leftValue={item.created_at}
             />
           </View>
-          <TransactionRow
-            leftTitle={item.beneficiary_name}
-            leftValue={item.account_number}
-            rightTitle="NOMINAL"
-            rightValue={item.amount}
-          />
-          <TransactionRow
-            leftTitle="BERITA TRANSFER"
-            leftValue={item.remark}
-            rightTitle="KODE UNIK"
-            rightValue={item.unique_code}
-          />
-          <TransactionRow
-            leftTitle="WAKTU DIBUAT"
-            leftValue={item.created_at}
-          />
         </View>
-      </View>
 
-      {/* Snackbar */}
-      <Snackbar
-        visible={visible}
-        onDismiss={_handleCloseSnackbar}
-        duration={1000}>
-        Id transaksi berhasil disalin
-      </Snackbar>
-    </ScrollView>
+        {/* Snackbar */}
+        <Snackbar
+          message="Id transaksi berhasil disalin"
+          visible={visible}
+          onDismiss={_handleCloseSnackbar}
+          duration={1000}
+        />
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
