@@ -2,7 +2,7 @@ This is a new [**React Native**](https://reactnative.dev) project, bootstrapped 
 
 # Getting Started
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+> **Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
 
 ## Step 1: Start the Metro Server
 
@@ -13,9 +13,6 @@ To start Metro, run the following command from the _root_ of your React Native p
 ```bash
 # using npm
 npm start
-
-# OR using Yarn
-yarn start
 ```
 
 ## Step 2: Start your Application
@@ -27,9 +24,6 @@ Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _roo
 ```bash
 # using npm
 npm run android
-
-# OR using Yarn
-yarn android
 ```
 
 ### For iOS
@@ -37,43 +31,142 @@ yarn android
 ```bash
 # using npm
 npm run ios
-
-# OR using Yarn
-yarn ios
 ```
 
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
+### Documentation
 
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
+This documentation explains the flow and structure of the this App, including data handling, API integration, search and filter functionalities, and error management.
 
-## Step 3: Modifying your App
+---
 
-Now that you have successfully run the app, let's modify it.
+## **Application Flow**
 
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
+### **1. Transaction List Page**
 
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
+- Upon entering the Transaction List page, the `fetchAPI` function inside the `useEffect` hook is triggered.
+- The `fetchAPI` function, derived from the custom `useApiService` hook, fetches data from the API and renders it inside a `FlatList`.
+- Each list item is represented by a `TransactionItem` component containing the required transaction details.
+- Clicking on a transaction navigates to the Transaction Detail page, passing the selected item data.
 
-## Congratulations! :tada:
+### **2. Transaction Detail Page**
 
-You've successfully run and modified your React Native App. :partying_face:
+- Displays detailed information about a transaction.
+- Features a "Copy Transaction ID" functionality. Clicking it shows a **Snackbar** with the message: _"ID transaksi berhasil disalin"_ (Transaction ID copied).
+- Includes "Back" and "Close" buttons to return to the Transaction List page.
 
-### Now what?
+### **3. Search and Filter Functionality**
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
+- The Transaction List page includes a **Search** feature to search by:
+  - Name
+  - Bank
+  - Nominal value
+- Includes a **Filter** feature to sort data by criteria such as:
+  - A-Z
+  - Z-A
+  - Newest
+  - Oldest
+- **Search and Filter** functionalities can be combined seamlessly.
 
-# Troubleshooting
+---
 
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+## **Data Flow**
 
-# Learn More
+### **1. API Endpoint**
 
-To learn more about React Native, take a look at the following resources:
+- Data is fetched from the endpoint: `https://recruitment-test.flip.id/frontend-test`.
+- **Axios** is used for API calls, with an interceptor implemented for global error handling.
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+### **2. API Structure**
+
+- API management is handled in the **`apiClient.ts`** file:
+  - Manages Axios instance.
+  - Base URL: `https://recruitment-test.flip.id`.
+- Endpoints are stored in **`apiServices.ts`**:
+  - Stores API endpoints.
+  - Current endpoint: `/frontend-test` via `getTransactionList`.
+
+---
+
+## **API Success Flow**
+
+### **Using `useApiService`**
+
+- The `useApiService` hook is used for managing API calls, search, and filter functionalities.
+- Return Type:
+  ```typescript
+  {
+    data: T | null;
+    rawData: T | null;
+    loading: boolean;
+    error: string | null;
+    statusCode: number | null;
+    fetchAPI: (...args: any[]) => Promise<void>;
+    applyFilter: (filterFn?: (data: T) => T) => void;
+    search: (
+      query: string,
+      searchFn: (item: T, query: string) => boolean,
+    ) => void;
+  }
+  ```
+
+## **Data Transformation**
+
+1. **API Response Transformation**
+
+   - The API response (object) is transformed into an array using `transformObjectToArray` for compatibility with `FlatList`.
+
+2. **Model Mapping**
+
+   - **`TransactionList`**: Maps the transformed data.
+   - **`DetailTransaction`**: Formats and enriches transaction details with additional keys as required.
+
+3. **State Management**
+   - Processed data is stored in three states:
+     - **`data`**: Filtered or search-applied data.
+     - **`rawData`**: Original API response.
+     - **`filteredData`**: Used for combined search and filter functionalities.
+
+---
+
+## **Search and Filter Combination**
+
+- **Search**:
+
+  - Filters data using the `search` function from `useApiService`, passing the param with query text and the `searchTransactions` helper.
+
+- **Filter**:
+
+  - Sort data using the `applyFilter` function from `useApiService`. It's param is a sorting function or empty (return default data without filter)
+  - Applies sorting criteria using helper functions like:
+    - `sortByAscendingName`
+    - `sortByDescendingName`
+    - `sortByNewestDate`
+    - `sortByOldestDate`
+
+- **Search and Filter Combination**:
+  - Both functionalities are combined via the `filteredData` state in `useApiService`.
+
+## **API Error Flow**
+
+### **1. Error Handling with Axios Interceptor**
+
+- A global `showErrorPopup` function is used to display error messages via a **Popup Error Message**.
+- **Interceptor Workflow**:
+  1. **For responses with errors**:
+     - Extract the `status` and `message`.
+     - Use a `switch` statement to handle common error codes (e.g., 401, 404, 500).
+     - Call `showErrorPopup` with the `status` and error message.
+  2. **For network errors**:
+     - Call `showErrorPopup` with a `null` status and a network error message.
+
+---
+
+### **2. Integration in AppNavigator**
+
+- The `setErrorPopupHandler` function registers the actual error handler in `AppNavigator`.
+- **On error**:
+  - The handler updates the local state:
+    - `popupState.visible`
+    - `popupState.message`
+    - `popupState.status`
+  - The **Popup Error Message** is displayed with the error message and status.
