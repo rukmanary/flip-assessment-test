@@ -1,6 +1,6 @@
 /* eslint-disable curly */
-import React, { useState, useEffect, memo } from 'react';
-import { Animated, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { memo, useEffect, useState } from 'react';
+import { Animated, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { COLORS } from '../../themes';
 
 interface SnackbarProps {

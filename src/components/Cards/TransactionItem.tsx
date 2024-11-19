@@ -1,9 +1,9 @@
 import React, { memo, useCallback } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { COLORS } from '../../themes';
 import { BankTransferRoute, TransferStatus } from '..';
-import { DetailTransactionData, Status } from '../../types';
 import { useNavigation } from '../../hooks';
+import { COLORS } from '../../themes';
+import { DetailTransactionData, Status } from '../../types';
 
 interface TransactionItem {
   item: DetailTransactionData;

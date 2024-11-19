@@ -1,19 +1,19 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { useCallback } from 'react';
 import {
-  View,
-  StyleSheet,
+  SafeAreaView,
   ScrollView,
+  StyleSheet,
   Text,
   TouchableOpacity,
-  SafeAreaView,
+  View,
 } from 'react-native';
-import { COLORS } from '../../themes';
-import { TransactionDetailProps } from '../../types';
 import { Icon } from '../../assets';
 import { BankTransferRoute, Snackbar, TransactionRow } from '../../components';
-import { useNavigation } from '../../hooks';
 import { copyToClipboard } from '../../helpers';
+import { useNavigation } from '../../hooks';
+import { COLORS } from '../../themes';
+import { TransactionDetailProps } from '../../types';
 
 const TransactionDetail = ({
   route: {

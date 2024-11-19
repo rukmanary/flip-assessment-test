@@ -1,4 +1,4 @@
-import TransactionList from './TransactionList';
 import DetailTransaction from './DetailTransaction';
+import TransactionList from './TransactionList';
 
-export { TransactionList, DetailTransaction };
+export { DetailTransaction, TransactionList };

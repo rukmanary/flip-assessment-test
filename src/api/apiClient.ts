@@ -1,7 +1,7 @@
 import axios, {
+  AxiosError,
   AxiosResponse,
   InternalAxiosRequestConfig,
-  AxiosError,
 } from 'axios';
 
 let showErrorPopup: (status: number | null, message: string) => void = () => {};

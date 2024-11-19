@@ -6,8 +6,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { COLORS } from '../../themes';
 import { Icon } from '../../assets';
+import { COLORS } from '../../themes';
 
 interface InputSearchProps {
   onSearch: (text: string) => void;

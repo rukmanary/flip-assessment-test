@@ -1,12 +1,12 @@
 import React, { memo, useCallback, useState } from 'react';
 import {
-  Modal,
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
   FlatList,
+  Modal,
   Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { COLORS } from '../../themes';
 

@@ -1,8 +1,8 @@
-import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import ScreenName from './ScreenName';
-import { TransactionList, DetailTransaction } from '../screens';
+import React from 'react';
+import { DetailTransaction, TransactionList } from '../screens';
 import { DetailTransactionData } from '../types';
+import ScreenName from './ScreenName';
 
 export type RootStackParamList = {
   [ScreenName.TRANSACTION_LIST]: undefined;

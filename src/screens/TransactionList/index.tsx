@@ -1,8 +1,6 @@
 /* eslint-disable curly */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { View, StyleSheet, Text, FlatList, SafeAreaView } from 'react-native';
-import { COLORS } from '../../themes';
-import { useApiService } from '../../hooks';
+import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { getTransactionList } from '../../api/apiServices';
 import {
   ErrorState,
@@ -11,7 +9,6 @@ import {
   Searchbar,
   TransactionItem,
 } from '../../components';
-import { DetailTransactionData, FILTER } from '../../types';
 import {
   searchTransactions,
   sortByAscendingName,
@@ -19,6 +16,9 @@ import {
   sortByNewestDate,
   sortByOldestDate,
 } from '../../helpers';
+import { useApiService } from '../../hooks';
+import { COLORS } from '../../themes';
+import { DetailTransactionData, FILTER } from '../../types';
 
 const TransactionList = () => {
   const { data, error, fetchAPI, loading, statusCode, search, applyFilter } =

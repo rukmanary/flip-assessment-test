@@ -46,4 +46,4 @@ const formatUpperCase = (name: string): string => {
     .join(' ');
 };
 
-export { transformObjectToArray, formatCurrency, formatDate, formatUpperCase };
+export { formatCurrency, formatDate, formatUpperCase, transformObjectToArray };
