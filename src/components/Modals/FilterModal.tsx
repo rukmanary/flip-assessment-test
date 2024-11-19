@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { memo, useCallback, useState } from 'react';
 import {
   Modal,
   View,
@@ -32,11 +32,34 @@ interface SortModalProps {
 const FilterModal = ({ visible, onClose, onSelectOption }: SortModalProps) => {
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
 
-  const handleSelectOption = (option: SortOption) => {
-    setSelectedOption(option.id);
-    onSelectOption(option.label);
-    onClose();
-  };
+  const _handleSelectOption = useCallback(
+    (option: SortOption) => {
+      setSelectedOption(option.id);
+      onSelectOption(option.label);
+      onClose();
+    },
+    [onSelectOption, onClose],
+  );
+
+  const _renderItem = useCallback(
+    ({ item }: { item: SortOption }) => (
+      <TouchableOpacity
+        style={styles.optionContainer}
+        onPress={() => _handleSelectOption(item)}>
+        <View style={styles.radioCircle}>
+          {selectedOption === item.id && <View style={styles.selectedCircle} />}
+        </View>
+        <Text
+          style={[
+            styles.optionText,
+            selectedOption === item.id && styles.selectedOptionText,
+          ]}>
+          {item.label}
+        </Text>
+      </TouchableOpacity>
+    ),
+    [selectedOption, _handleSelectOption],
+  );
 
   return (
     <Modal
@@ -49,24 +72,7 @@ const FilterModal = ({ visible, onClose, onSelectOption }: SortModalProps) => {
           <FlatList
             data={SORT_OPTIONS}
             keyExtractor={item => item.id.toString()}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                style={styles.optionContainer}
-                onPress={() => handleSelectOption(item)}>
-                <View style={styles.radioCircle}>
-                  {selectedOption === item.id && (
-                    <View style={styles.selectedCircle} />
-                  )}
-                </View>
-                <Text
-                  style={[
-                    styles.optionText,
-                    selectedOption === item.id && styles.selectedOptionText,
-                  ]}>
-                  {item.label}
-                </Text>
-              </TouchableOpacity>
-            )}
+            renderItem={_renderItem}
           />
         </View>
       </Pressable>
@@ -113,4 +119,4 @@ const styles = StyleSheet.create({
   selectedOptionText: { fontWeight: 'bold', color: COLORS.tomato },
 });
 
-export default FilterModal;
+export default memo(FilterModal);

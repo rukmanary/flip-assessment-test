@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { TransactionRowProps } from '../../types';
 
@@ -38,4 +38,4 @@ const styles = StyleSheet.create({
   value: { fontWeight: '400', fontSize: 16 },
 });
 
-export default TransactionRow;
+export default memo(TransactionRow);

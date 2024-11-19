@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import {
   StyleSheet,
   Text,
@@ -23,6 +23,7 @@ const Searchbar = ({ onSearch, onSortPress, sortText }: InputSearchProps) => {
           placeholder="Cari nama, bank, atau nominal"
           placeholderTextColor={COLORS.darkGrey}
           style={styles.input}
+          autoCorrect={false}
           onChangeText={onSearch}
         />
       </View>
@@ -36,8 +37,6 @@ const Searchbar = ({ onSearch, onSortPress, sortText }: InputSearchProps) => {
     </View>
   );
 };
-
-export default Searchbar;
 
 const styles = StyleSheet.create({
   container: {
@@ -71,3 +70,5 @@ const styles = StyleSheet.create({
   containerFilter: { flexDirection: 'row', alignItems: 'center' },
   textFilter: { color: COLORS.tomato, fontWeight: 'bold' },
 });
+
+export default memo(Searchbar);

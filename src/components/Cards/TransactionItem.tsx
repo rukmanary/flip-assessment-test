@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { memo, useCallback } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { COLORS } from '../../themes';
 import { BankTransferRoute, TransferStatus } from '..';
@@ -49,8 +49,6 @@ const TransactionItem = ({ item }: TransactionItem) => {
   );
 };
 
-export default TransactionItem;
-
 const styles = StyleSheet.create({
   cardContainer: { flexDirection: 'row', marginBottom: 12 },
   indicator: {
@@ -79,3 +77,5 @@ const styles = StyleSheet.create({
     marginHorizontal: 4,
   },
 });
+
+export default memo(TransactionItem);
