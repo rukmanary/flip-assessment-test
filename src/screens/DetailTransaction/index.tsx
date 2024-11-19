@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { memo, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import {
   View,
   StyleSheet,
@@ -117,4 +117,4 @@ const styles = StyleSheet.create({
   flex1: { flex: 1 },
 });
 
-export default memo(TransactionDetail);
+export default TransactionDetail;
