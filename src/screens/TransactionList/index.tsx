@@ -1,6 +1,13 @@
 /* eslint-disable curly */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import {
+  FlatList,
+  KeyboardAvoidingView,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import { getTransactionList } from '../../api/apiServices';
 import {
   ErrorState,
@@ -79,23 +86,25 @@ const TransactionList = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Searchbar
-        onSearch={_onSearch}
-        onSortPress={_openModalFilter}
-        sortText={selectedSort}
-      />
-      <FlatList
-        data={data}
-        keyExtractor={item => item.id.toString()}
-        renderItem={_renderItem}
-        contentContainerStyle={styles.contentStyle}
-        ListEmptyComponent={_emptyState}
-      />
-      <FilterModal
-        visible={modalVisible}
-        onClose={_onCloseModal}
-        onSelectOption={_handleSelectOption}
-      />
+      <KeyboardAvoidingView style={styles.container} behavior="padding">
+        <Searchbar
+          onSearch={_onSearch}
+          onSortPress={_openModalFilter}
+          sortText={selectedSort}
+        />
+        <FlatList
+          data={data}
+          keyExtractor={item => item.id.toString()}
+          renderItem={_renderItem}
+          contentContainerStyle={styles.contentStyle}
+          ListEmptyComponent={_emptyState}
+        />
+        <FilterModal
+          visible={modalVisible}
+          onClose={_onCloseModal}
+          onSelectOption={_handleSelectOption}
+        />
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };

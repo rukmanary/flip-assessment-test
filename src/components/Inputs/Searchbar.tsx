@@ -24,7 +24,9 @@ const Searchbar = ({ onSearch, onSortPress, sortText }: InputSearchProps) => {
           placeholderTextColor={COLORS.darkGrey}
           style={styles.input}
           autoCorrect={false}
+          allowFontScaling={false}
           onChangeText={onSearch}
+          textAlignVertical="center"
         />
       </View>
       <TouchableOpacity
@@ -42,14 +44,14 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderRadius: 8,
     paddingHorizontal: 16,
     paddingVertical: 12,
     marginHorizontal: 8,
     marginTop: 16,
     marginBottom: 8,
-    shadowColor: '#000',
+    shadowColor: COLORS.black,
     shadowOpacity: 0.1,
     shadowRadius: 5,
     shadowOffset: { width: 0, height: 2 },
